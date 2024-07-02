@@ -1,0 +1,19 @@
+body{
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,255,188,1) 100%);
+
+
+}
+.container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.display-1{
+    margin-top: 40vh;
+    color: white;
+}
+
+.btn.btn-primary{
+    background-color: rgb(16, 201, 139);
+}
