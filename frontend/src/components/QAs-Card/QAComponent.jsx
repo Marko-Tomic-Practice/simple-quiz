@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 
 const QAComponent = () => {
-  return (
+    
+    const [question, setQuestion] = useState("");
+    const [answers, setAnswers] = useState([]);
+    const [count, setCount] = useState(0);
+
+    return (
     <div>
         <NavbarComponent/>
         <br/> <br/> <br/>
@@ -10,13 +15,22 @@ const QAComponent = () => {
             <div className='col-md-3'></div>
             <div className="col-md-6 card">
                 <div className="card-header h2">
-                    #1 Question
+                Question: <input 
+                    type="text"
+                    name='question'
+                    value={question}
+                    onChange={(e) => handleQuestionChange(e)}
+                />
                 </div>
                 <div className="card-body">
-                    <h5 className="card-title">Special title treatment</h5>
+                    <div className='row'>
+                        <h5 className="card-title col-md-2">{(count+1)}. Answer: </h5> 
+                        <input type="text" className='col-md-9'/>
+                        <button className='add-answer col-md-1'>+</button>
+                    </div>
                 </div>
-                <div className="card-footer text-muted">
-                    2 days ago
+                <div className="card-footer">
+                    <button>Submit</button>
                 </div>
             </div>
         </div>
