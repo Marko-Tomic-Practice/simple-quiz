@@ -1,11 +1,21 @@
 import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
+import TestComponent from '../TestComponent/TestComponent';
 
 const QAComponent = () => {
     
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
     const [count, setCount] = useState(0);
+    const [foos, setFoos] = useState([]);
+
+    function handlePlusClick(){
+        setCount(count+1);
+        console.log("Count: "+ count);
+        
+        setFoos(v=>[...v, count]);
+        console.log(foos);
+    }
 
     return (
     <div>
@@ -24,9 +34,14 @@ const QAComponent = () => {
                 </div>
                 <div className="card-body">
                     <div className='row'>
-                        <h5 className="card-title col-md-2">{(count+1)}. Answer: </h5> 
-                        <input type="text" className='col-md-9'/>
-                        <button className='add-answer col-md-1'>+</button>
+                        {
+                            foos.map((foo)=> (console.log("Foo: "+foo), <TestComponent key={foo} counter={foo}/>))
+                        }
+                        <div>
+                            <h5 className="card-title col-md-3">{(count+1)}. Answer: </h5>
+                            <input type="text" className='col-md-8'/>
+                            <button className='add-answer col-md-1' onClick={handlePlusClick}>+</button>
+                        </div>
                     </div>
                 </div>
                 <div className="card-footer">
