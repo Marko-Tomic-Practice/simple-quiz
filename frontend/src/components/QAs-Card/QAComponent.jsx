@@ -9,14 +9,38 @@ const QAComponent = () => {
     const [count, setCount] = useState(0);
     const [foos, setFoos] = useState([]);
 
+    const [test1, setTest1] = useState("");
+    const [test2, setTest2] = useState([]);
+
     function handlePlusClick(){
         setCount(count+1);
-        console.log("Count: "+ count);
+        //console.log("Count: "+ count);
         
         setFoos(v=>[...v, count]);
-        console.log(foos);
+        //console.log(foos);
     }
 
+    function handleQuestionChange(e){
+        setQuestion(e.target.input);
+    }
+
+    function handleSave(e){
+        setTest2(e.target.value);
+
+        console.log(test2);
+    }
+
+    function handleAnswerChange(test1) {
+        // console.log(e);
+        // console.log(e.target.value);
+        // setTest1(e.target.value);
+
+        setTest2([...test2, test1]);
+
+        console.log(test2);
+        
+    }
+// console.log("Foo: "+foo), <TestComponent key={foo} counter={foo} value = {val}/>
     return (
     <div>
         <NavbarComponent/>
@@ -28,14 +52,25 @@ const QAComponent = () => {
                 Question: <input 
                     type="text"
                     name='question'
-                    value={question}
-                    onChange={(e) => handleQuestionChange(e)}
+                    onChange={handleQuestionChange}
                 />
                 </div>
                 <div className="card-body">
                     <div className='row'>
                         {
-                            foos.map((foo)=> (console.log("Foo: "+foo), <TestComponent key={foo} counter={foo}/>))
+                            foos.map((foo)=> (
+                                <div key={foo}>
+                                    <h5 className="card-title col-md-3">{
+                                        foo + 1                         
+                                        }. Answer: 
+                                    </h5>
+                                    <input type="text" key={foo} className='col-md-8' 
+                                    onBlur={(e)=> {
+                                                   setTest1(e.target.value);
+                                                   handleAnswerChange(test1);
+                                                   }}/>
+                                </div>
+                            ))
                         }
                         <div>
                             <h5 className="card-title col-md-3">{(count+1)}. Answer: </h5>
