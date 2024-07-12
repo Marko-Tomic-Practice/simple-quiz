@@ -1,22 +1,15 @@
 import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 import TestComponent from '../TestComponent/TestComponent';
+import "./QAComponent.css"
 
 const QAComponent = () => {
     
     const [inputs, setInputs] = useState([]);
     const [question, setQuestion] = useState("");
+    const [counter, setCounter] = useState(1);
+    const [isActive, setIsActive] = useState([]);
 
-<<<<<<< Updated upstream
-    function handlePlusClick(){
-        setCount(count+1);
-        console.log("Count: "+ count);
-        
-        setFoos(v=>[...v, count]);
-        console.log(foos);
-    }
-
-=======
 
     function handleQuestionChange(e){
         setQuestion(e.target.value);
@@ -24,6 +17,8 @@ const QAComponent = () => {
 
     function handleAddInput(){
         setInputs([...inputs, { value: '' }]);
+        setCounter(counter+1);
+        //console.log(counter);
     }
 
     function handleInputChange(index, e){
@@ -36,11 +31,24 @@ const QAComponent = () => {
         setInputs(newInputs);
     }
 
+    function handleIsActiveChange(index){
+        const newIsActive = inputs.map((input, i) => {
+            if (i === index) {
+              return { ...input, value: true };
+            }
+            return isActive;    
+    });
+    setIsActive(newIsActive);
+}
+
     function handleSubmit(){
-        console.log(inputs);
+        //console.log(question);
+        //console.log(inputs);        
+        //console.log(inputs[1]);
+        //console.log(inputs[1].value);
+        console.log(isActive)
     }
     
->>>>>>> Stashed changes
     return (
     <div>
         <NavbarComponent/>
@@ -49,41 +57,37 @@ const QAComponent = () => {
             <div className='col-md-3'></div>
             <div className="col-md-6 card">
                 <div className="card-header h2">
-                Question: <input 
+                Question: <input
+                    className='col-md-7' 
                     type="text"
                     name='question'
                     value={question}
                     onChange={(e) => handleQuestionChange(e)}
-                />
+                /> ?
                 </div>
                 <div className="card-body">
-                    <div className='row'>
-<<<<<<< Updated upstream
-                        {
-                            foos.map((foo)=> (console.log("Foo: "+foo), <TestComponent key={foo} counter={foo}/>))
-                        }
-                        <div>
-                            <h5 className="card-title col-md-3">{(count+1)}. Answer: </h5>
-                            <input type="text" className='col-md-8'/>
-                            <button className='add-answer col-md-1' onClick={handlePlusClick}>+</button>
-                        </div>
-=======
-                    
+                    <div className='row'>  
                         {inputs.map((input, index) => (
                             <div key={index}>
-                            <input
-                                type="text"
-                                value={input.value}
-                                onChange={(e) => handleInputChange(index, e)}
-                            />
+                                <h5>{index+1}. Answer:</h5>
+                                <input
+                                    className='col-md-6'
+                                    type="text"
+                                    value={input.value}
+                                    onChange={(e) => handleInputChange(index, e)}
+                                />.
+                                <h6>Da li je tacan odgovor?</h6>
+                                <div className="btn-group" role="group" aria-label="Basic outlined button group"> 
+                                    <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
+                                    <button type="button" className="btn btn-outline-primary negative active">❌</button>
+                                </div>
                             </div>
                         ))}
->>>>>>> Stashed changes
-                    </div>
-                    <button onClick={handleAddInput}>Add Answer</button>
+                    </div> <br/>
+                    <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>
                 </div>
                 <div className="card-footer">
-                <button onClick={handleSubmit}>Submit</button>
+                <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
         </div>
