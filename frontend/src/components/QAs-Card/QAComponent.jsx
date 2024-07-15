@@ -48,6 +48,70 @@ const QAComponent = () => {
         //console.log(inputs[1].value);
         console.log(isActive)
     }
+
+    function handleRemoveClick(index){
+        let newArray = inputs;
+        console.log(index);
+        if (index > -1) { 
+            newArray.splice(index, 1);
+            setInputs(newArray);
+         }
+         console.log(newArray);
+         test();
+    }
+
+    function test(){
+        return(
+            inputs.map((input, index) => (
+                <div key={index}>
+                    <h5>{index+1}. Answer:</h5>
+                    <div className='row'>
+                        <input
+                            className='col-md-6'
+                            type="text"
+                            value={input.value}
+                            onChange={(e) => handleInputChange(index, e)}
+                        />.
+                        <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
+                    </div>
+                    <div className='row'>
+                        <h6>Is the question correct?</h6>
+                        <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
+                            <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
+                            <button type="button" className="btn btn-outline-primary negative active">❌</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            )) 
+        );
+    }
+
+    /**
+     * 
+     * inputs.map((input, index) => (
+                            <div key={index}>
+                                <h5>{index+1}. Answer:</h5>
+                                <div className='row'>
+                                    <input
+                                        className='col-md-6'
+                                        type="text"
+                                        value={input.value}
+                                        onChange={(e) => handleInputChange(index, e)}
+                                    />.
+                                    <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
+                                </div>
+                                <div className='row'>
+                                    <h6>Is the question correct?</h6>
+                                    <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
+                                        <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
+                                        <button type="button" className="btn btn-outline-primary negative active">❌</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        ))
+     */
     
     return (
     <div>
@@ -67,22 +131,7 @@ const QAComponent = () => {
                 </div>
                 <div className="card-body">
                     <div className='row'>  
-                        {inputs.map((input, index) => (
-                            <div key={index}>
-                                <h5>{index+1}. Answer:</h5>
-                                <input
-                                    className='col-md-6'
-                                    type="text"
-                                    value={input.value}
-                                    onChange={(e) => handleInputChange(index, e)}
-                                />.
-                                <h6>Is the question correct?</h6>
-                                <div className="btn-group" role="group" aria-label="Basic outlined button group"> 
-                                    <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
-                                    <button type="button" className="btn btn-outline-primary negative active">❌</button>
-                                </div>
-                            </div>
-                        ))}
+                        {test()}
                     </div> <br/>
                     <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>
                 </div>
