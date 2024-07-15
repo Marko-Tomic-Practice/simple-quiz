@@ -76,7 +76,7 @@ const QAComponent = () => {
                                     value={input.value}
                                     onChange={(e) => handleInputChange(index, e)}
                                 />.
-                                <h6>Da li je tacan odgovor?</h6>
+                                <h6>Is the question correct?</h6>
                                 <div className="btn-group" role="group" aria-label="Basic outlined button group"> 
                                     <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
                                     <button type="button" className="btn btn-outline-primary negative active">❌</button>
