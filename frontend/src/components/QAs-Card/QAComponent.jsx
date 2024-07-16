@@ -71,7 +71,7 @@ const QAComponent = () => {
                             type="text"
                             value={input.value}
                             onChange={(e) => handleInputChange(index, e)}
-                        />.
+                        />
                         <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
                     </div>
                     <div className='row'>
