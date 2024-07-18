@@ -1,74 +1,97 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 import TestComponent from '../TestComponent/TestComponent';
 import "./QAComponent.css"
 
 const QAComponent = () => {
     
-    const [inputs, setInputs] = useState([]);
     const [question, setQuestion] = useState("");
-    const [counter, setCounter] = useState(1);
-    const [isActive, setIsActive] = useState([]);
+    const [answers, setAnswers] = useState([]);
+    const [isSubmited, setIsSubmited] = useState(false);
+    const [passed, setPassed] = useState(false);
 
     function handleQuestionChange(e){
         setQuestion(e.target.value);
     }
 
     function handleAddInput(){
-        setInputs([...inputs, { value: '' }]);
-        setCounter(counter+1);
-        //console.log(counter);
+         setAnswers([...answers, { text: '', isCorrect: false}]);
     }
 
     function handleInputChange(index, e){
-            const newInputs = inputs.map((input, i) => {
-                if (i === index) {
-                  return { ...input, value: e.target.value };
-                }
-                return input;    
+
+        const test1 = answers.map((answer, i) => {
+            if(i === index){
+                return { ...answer, text: e.target.value };
+            }
+            return answer;
         });
-        setInputs(newInputs);
+        setAnswers(test1);
+        
     }
 
-    function handleIsActiveChange(index){
-        const newIsActive = inputs.map((input, i) => {
-            if (i === index) {
-              return { ...input, value: true };
-            }
-            return isActive;    
-    });
-    setIsActive(newIsActive);
-}
+    function handleIsActiveChange(e, index){
+
+    const test2 = answers.map((answer, i) => {
+        if(i === index){
+            return { ...answer, isCorrect: true};
+        }
+        return answer;
+    })
+    setAnswers(test2);
+
+    }
+
+    function testErrors(){
+        
+        if(answers.length>2){
+
+            answers.map((ans) => {
+                if(ans.text.length != 0){
+                    console.log("Nije greska");            
+                }else{
+                    console.log("Greska")
+                }
+            });
+
+        } else
+            return (
+                 <h3>To submit you need at least 3 answers!</h3>
+                   );
+
+    
+    }
 
     function handleSubmit(){
-        //console.log(question);
-        //console.log(inputs);        
-        //console.log(inputs[1]);
-        //console.log(inputs[1].value);
-        console.log(isActive)
+
+        setIsSubmited(true);
+
+        answers.map((ans)=> console.log(ans.text));
+        
+
+
+        console.log(answers);
     }
 
     function handleRemoveClick(index){
-        const newArray = [...inputs];
+        const newArray = [...answers];
          
         newArray.splice(index, 1);
-        setInputs(newArray);
-         
-         console.log(inputs);
+        setAnswers(newArray);
     }
 
     function test(){
-        console.log(inputs);
+
         return(
             
-            inputs.map((input, index) => (
+            answers.map((ans, index) => (
                 <div key={index}>
                     <h5>{index+1}. Answer:</h5>
                     <div className='row'>
                         <input
                             className='col-md-6 inputs'
                             type="text"
-                            value={input.value}
+                            value={ans.text}
                             onChange={(e) => handleInputChange(index, e)}
                         />
                         <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
@@ -76,7 +99,7 @@ const QAComponent = () => {
                     <div className='row'>
                         <h6>Is the question correct?</h6>
                         <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
-                            <button type="button" className="btn btn-outline-primary" onClick={()=>handleIsActiveChange(index)}>✔️</button>
+                            <button type="button" className="btn btn-outline-primary positive" onClick={(e)=>handleIsActiveChange(e, index)}>✔️</button>
                             <button type="button" className="btn btn-outline-primary  negative active">❌</button>
                         </div>
                     </div>
@@ -110,6 +133,7 @@ const QAComponent = () => {
                 </div>
                 <div className="card-footer">
                 <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
+                {   isSubmited && testErrors()    }
                 </div>
             </div>
         </div>
