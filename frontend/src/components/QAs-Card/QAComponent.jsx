@@ -9,68 +9,17 @@ const QAComponent = () => {
     const [answers, setAnswers] = useState([]);
     const [isSubmited, setIsSubmited] = useState(false);
     const [passed, setPassed] = useState(false);
+    const [errors, setErrors] = useState([]);
+
 
     function handleQuestionChange(e){
         setQuestion(e.target.value);
     }
 
+
     function handleAddInput(){
-         setAnswers([...answers, { text: '', isCorrect: false}]);
-    }
-
-    function handleInputChange(index, e){
-
-        const test1 = answers.map((answer, i) => {
-            if(i === index){
-                return { ...answer, text: e.target.value };
-            }
-            return answer;
-        });
-        setAnswers(test1);
-        
-    }
-
-    function handleIsActiveChange(e, index){
-
-    const test2 = answers.map((answer, i) => {
-        if(i === index){
-            return { ...answer, isCorrect: true};
-        }
-        return answer;
-    })
-    setAnswers(test2);
-
-    }
-
-    function testErrors(){
-        
-        if(answers.length>2){
-
-            answers.map((ans) => {
-                if(ans.text.length != 0){
-                    console.log("Nije greska");            
-                }else{
-                    console.log("Greska")
-                }
-            });
-
-        } else
-            return (
-                 <h3>To submit you need at least 3 answers!</h3>
-                   );
-
-    
-    }
-
-    function handleSubmit(){
-
-        setIsSubmited(true);
-
-        answers.map((ans)=> console.log(ans.text));
-        
-
-
-        console.log(answers);
+        setAnswers([...answers, { text: '', isCorrect: false}]);
+        setErrors([...errors, null]);
     }
 
     function handleRemoveClick(index){
@@ -80,8 +29,67 @@ const QAComponent = () => {
         setAnswers(newArray);
     }
 
-    function test(){
+   function handleInputChange(index, e){
 
+        const ansTextArray = answers.map((answer, i) => {
+            if(i === index){
+                return { ...answer, text: e.target.value };
+            }
+            return answer;
+        });
+        setAnswers(ansTextArray);
+    }
+
+    function handleIsActiveChange(e, index){
+
+        const ansIsCorrectArray = answers.map((answer, i) => {
+            if(i === index){
+                return { ...answer, isCorrect: true};
+            }
+            return answer;
+        })
+        setAnswers(ansIsCorrectArray);
+    
+    }
+
+    function testErrors(){
+
+        validate();
+
+        if(answers.length > 2) {
+            
+            console.log("Passed");
+
+        } else {
+            return(
+                <h3>You need at least 3 anwers!</h3>
+            );
+        }
+    }
+    
+    function validate(){
+        const texts = answers.map((el) => el.text);
+        console.log(texts);
+
+        const errorList = texts.map((txt, i) => {
+            if(txt.trim() === ''){
+                return i;
+            }
+            return null;
+        });
+        setErrors(errorList);
+
+        // console.log(errors);
+       
+    } 
+        
+    function handleSubmit(){
+        setIsSubmited(true);
+        testErrors();
+        // console.log(errors);
+    }
+
+    function dynamicInputs(){
         return(
             
             answers.map((ans, index) => (
@@ -89,12 +97,14 @@ const QAComponent = () => {
                     <h5>{index+1}. Answer:</h5>
                     <div className='row'>
                         <input
-                            className='col-md-6 inputs'
+                            className={'col-md-6 inputs'}
                             type="text"
                             value={ans.text}
                             onChange={(e) => handleInputChange(index, e)}
                         />
+                        
                         <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
+                        <span>{index === errors[index] && errors[index] && "Please fill answer"}</span>
                     </div>
                     <div className='row'>
                         <h6>Is the question correct?</h6>
@@ -127,13 +137,13 @@ const QAComponent = () => {
                 </div>
                 <div className="card-body">
                     <div className='row'>  
-                        {    test()    }                        
+                        {    dynamicInputs()    }                        
                     </div> <br/>
                     <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>
                 </div>
                 <div className="card-footer">
                 <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
-                {   isSubmited && testErrors()    }
+                {/* {   isSubmited && testErrors()    } */}
                 </div>
             </div>
         </div>
