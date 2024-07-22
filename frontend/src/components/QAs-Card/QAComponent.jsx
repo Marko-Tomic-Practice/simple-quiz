@@ -11,6 +11,8 @@ const QAComponent = () => {
     const [passed, setPassed] = useState(false);
     const [errors, setErrors] = useState([]);
     const [res, setRes] = useState();
+    const [trueClassName, setTrueClassName] = useState("btn btn-outline-primary positive");
+    const [falseClassName, setFalseClassName] = useState("btn btn-outline-primary negative active");
 
 
     function handleQuestionChange(e){
@@ -42,7 +44,7 @@ const QAComponent = () => {
         setAnswers(ansTextArray);
     }
 
-    function handleIsActiveChange(e, index){
+    function handleIsActiveTrue(e, index){
 
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
@@ -51,11 +53,27 @@ const QAComponent = () => {
             return answer;
         })
         setAnswers(ansIsCorrectArray);
-    
+
+        setTrueClassName("btn btn-outline-primary positive active");
+        setFalseClassName("btn btn-outline-primary negative");
+    }
+
+    function handleIsActiveFalse(e, index){
+
+        const ansIsCorrectArray = answers.map((answer, i) => {
+            if(i === index){
+                return { ...answer, isCorrect: false };
+            }
+            return answer;
+        })
+        setAnswers(ansIsCorrectArray);
+
+        setTrueClassName("btn btn-outline-primary positive");
+        setFalseClassName("btn btn-outline-primary negative active");
     }
 
     function testErrors(){
-        console.log(answers.length);
+        // console.log(answers.length);
         if(answers.length < 3) {
             return(
                 <h3>You need at least 3 anwers!</h3>
@@ -81,6 +99,7 @@ const QAComponent = () => {
         setIsSubmited(true);
         setRes(testErrors());
         validate();
+        console.log(answers);
     }
 
     function dynamicInputs(){
@@ -103,8 +122,8 @@ const QAComponent = () => {
                     <div className='row'>
                         <h6>Is the question correct?</h6>
                         <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
-                            <button type="button" className="btn btn-outline-primary positive" onClick={(e)=>handleIsActiveChange(e, index)}>✔️</button>
-                            <button type="button" className="btn btn-outline-primary  negative active">❌</button>
+                            <button type="button" className={trueClassName} onClick={(e)=>handleIsActiveTrue(e, index)}>✔️</button>
+                            <button type="button" className={falseClassName} onClick={(e)=>handleIsActiveFalse(e, index)}>❌</button>
                         </div>
                     </div>
                 </div>
