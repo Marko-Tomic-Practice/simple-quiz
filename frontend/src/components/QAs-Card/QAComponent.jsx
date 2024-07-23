@@ -11,8 +11,6 @@ const QAComponent = () => {
     const [passed, setPassed] = useState(false);
     const [errors, setErrors] = useState([]);
     const [res, setRes] = useState();
-    const [trueClassName, setTrueClassName] = useState("btn btn-outline-primary positive");
-    const [falseClassName, setFalseClassName] = useState("btn btn-outline-primary negative active");
 
 
     function handleQuestionChange(e){
@@ -21,7 +19,7 @@ const QAComponent = () => {
 
 
     function handleAddInput(){
-        setAnswers([...answers, { text: '', isCorrect: false}]);
+        setAnswers([...answers, { text: '', isCorrect: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active"}]);
         setErrors([...errors, null]);
         setIsSubmited(false);
     }
@@ -44,43 +42,47 @@ const QAComponent = () => {
         setAnswers(ansTextArray);
     }
 
-    function handleIsActiveTrue(e, index){
+    function handleIsActiveTrue(index){
 
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
-                return { ...answer, isCorrect: true };
+                return { ...answer, isCorrect: true, classNamePositive: "btn btn-outline-primary positive active", classNameNegative: "btn btn-outline-primary negative" };
             }
             return answer;
         })
-        setAnswers(ansIsCorrectArray);
 
-        setTrueClassName("btn btn-outline-primary positive active");
-        setFalseClassName("btn btn-outline-primary negative");
+        setAnswers(ansIsCorrectArray);
     }
 
-    function handleIsActiveFalse(e, index){
-
+    function handleIsActiveFalse(index){
+        
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
-                return { ...answer, isCorrect: false };
+                
+                return { ...answer, isCorrect: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active" };
             }
             return answer;
         })
         setAnswers(ansIsCorrectArray);
-
-        setTrueClassName("btn btn-outline-primary positive");
-        setFalseClassName("btn btn-outline-primary negative active");
     }
 
     function testErrors(){
-        // console.log(answers.length);
-        if(answers.length < 3) {
-            return(
-                <h3>You need at least 3 anwers!</h3>
-            );
-        } else {
-            setIsSubmited(false);
-        }
+        const isCorrectList = answers.map((ans) => ans.isCorrect);
+
+        if(question!== ""){
+            if(answers.length < 3) {
+                return(
+                    <h3>You need at least 3 anwers!</h3>
+                );
+            } else if(!isCorrectList.includes(true)){
+                return (
+                    <h3>You need at least one correct answer!</h3>
+                );
+            } else{
+                setIsSubmited(false);
+            }
+        } else 
+            return <h3>Add question first!</h3>;
     }
     
     function validate(){
@@ -97,10 +99,13 @@ const QAComponent = () => {
         
     function handleSubmit(){
         setIsSubmited(true);
+        // testErrors();
         setRes(testErrors());
+        console.log(res);
         validate();
         console.log(answers);
     }
+
 
     function dynamicInputs(){
         return(
@@ -122,8 +127,8 @@ const QAComponent = () => {
                     <div className='row'>
                         <h6>Is the question correct?</h6>
                         <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
-                            <button type="button" className={trueClassName} onClick={(e)=>handleIsActiveTrue(e, index)}>✔️</button>
-                            <button type="button" className={falseClassName} onClick={(e)=>handleIsActiveFalse(e, index)}>❌</button>
+                            <button type="button" className={ans.classNamePositive} onClick={()=>handleIsActiveTrue(index)}>✔️</button>
+                            <button type="button" className={ans.classNameNegative} onClick={()=>handleIsActiveFalse(index)}>❌</button>
                         </div>
                     </div>
                 </div>
