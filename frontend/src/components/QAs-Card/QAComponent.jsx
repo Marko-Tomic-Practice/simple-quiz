@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
-import TestComponent from '../TestComponent/TestComponent';
 import "./QAComponent.css"
 import { addQuestion } from '../../services/QuestionService';
 
 const QAComponent = () => {
     
-    const [question, setQuestion] = useState("");
+    const [qtext, setQtext] = useState("");
     const [answers, setAnswers] = useState([]);
     const [isSubmited, setIsSubmited] = useState(false);
     const [passed, setPassed] = useState({questionPass: false, answerAndIsCorrectPass: false, answerFillPass: false});
@@ -16,12 +15,12 @@ const QAComponent = () => {
 
 
     function handleQuestionChange(e){
-        setQuestion(e.target.value);
+        setQtext(e.target.value);
     }
 
 
     function handleAddInput(){
-        setAnswers([...answers, { text: '', isCorrect: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active"}]);
+        setAnswers([...answers, { atext: '', correctAnswer: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active"}]);
         setErrors([...errors, null]);
         setIsSubmited(false);
     }
@@ -37,7 +36,7 @@ const QAComponent = () => {
 
         const ansTextArray = answers.map((answer, i) => {
             if(i === index){
-                return { ...answer, text: e.target.value };
+                return { ...answer, atext: e.target.value };
             }
             return answer;
         });
@@ -48,7 +47,7 @@ const QAComponent = () => {
 
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
-                return { ...answer, isCorrect: true, classNamePositive: "btn btn-outline-primary positive active", classNameNegative: "btn btn-outline-primary negative" };
+                return { ...answer, correctAnswer: true, classNamePositive: "btn btn-outline-primary positive active", classNameNegative: "btn btn-outline-primary negative" };
             }
             return answer;
         })
@@ -61,46 +60,19 @@ const QAComponent = () => {
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
                 
-                return { ...answer, isCorrect: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active" };
+                return { ...answer, correctAnswer: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active" };
             }
             return answer;
         })
         setAnswers(ansIsCorrectArray);
     }
-    /*
-    function testErrors(){
-        const isCorrectList = answers.map((ans) => ans.isCorrect);
-        console.log(question!== "");
-        if(question!== ""){
-            setPassed({...passed, questionPass: true});
-            console.log(passed);
-            if(answers.length < 3) {
-                setPassed({...passed, answerAndIsCorrectPass: false});
-                return(
-                    <h3>You need at least 3 anwers!</h3>
-                );
-            } else if(!isCorrectList.includes(true)){
-                setPassed({...passed, answerAndIsCorrectPass: false});
-                return (
-                    <h3>You need at least one correct answer!</h3>
-                );
-            } else{
-                setIsSubmited(false);
-            }
-            setPassed({...passed, answerAndIsCorrectPass: true});
-        } else {
-            setPassed({...passed, questionPass: false});
-            return <h3>Add question first!</h3>;
-        }
-          
-    }
-    */
+    
     function validation(){
 
-        const isCorrectList = answers.map((ans) => ans.isCorrect);
-        const texts = answers.map((el) => el.text);
+        const isCorrectList = answers.map((ans) => ans.correctAnswer);
+        const atexts = answers.map((el) => el.atext);
 
-        const errorList = texts.map((txt, i) => {
+        const errorList = atexts.map((txt, i) => {
             if(txt.trim() === ''){
                 return i;
             }
@@ -111,7 +83,7 @@ const QAComponent = () => {
 
         const isNull = (x) => x === null;
         
-        if(question!== ""){
+        if(qtext!== ""){
             
             if(answers.length < 3) {
                 setErrMessage("You need at least 3 anwers!");
@@ -134,43 +106,14 @@ const QAComponent = () => {
 
     }
 
-/*
-    function validate(){
-        const texts = answers.map((el) => el.text);
 
-        const errorList = texts.map((txt, i) => {
-            if(txt.trim() === ''){
-                return i;
-            }
-            return null;
-
-        });
-        setErrors(errorList);
-        // console.log(errorList);
-        // console.log(errorList.includes(!null));
-        // console.log(errorList.some())
-
-        const isNull = (x) => x === null;
-        // console.log(errorList.every(isNull));
-        if(errorList.every(isNull)){
-            setPassed({...passed, answerFillPass: true});
-        } else {
-            setPassed({...passed, answerFillPass: false});
-        }
-    }
-        */
         
     function handleSubmit(){
         setIsSubmited(true);
-        // testErrors();
-        // setRes(testErrors());
-        // console.log(res);
-        // validate();
-        // console.log(passed);
-        // console.log(answers);
 
-        let QAPayload = {question, answers};
+        const QAPayload = {qtext, answers};
         console.log(QAPayload);
+        
         if(validation()){
             // console.log("Prosao!");
             addQuestion(QAPayload).then( (res) => {
@@ -190,7 +133,7 @@ const QAComponent = () => {
                         <input
                             className={'col-md-6 inputs'}
                             type="text"
-                            value={ans.text}
+                            value={ans.atext}
                             onChange={(e) => handleInputChange(index, e)}
                         />
                         
@@ -221,7 +164,7 @@ const QAComponent = () => {
                     className='col-md-7' 
                     type="text"
                     name='question'
-                    value={question}
+                    value={qtext}
                     onChange={(e) => handleQuestionChange(e)}
                 /> ?
                 </div>
