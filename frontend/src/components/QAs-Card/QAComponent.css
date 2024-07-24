@@ -12,3 +12,8 @@
 .col-md-6.inputs{
     margin-left: 1rem;
 }
+
+.errMsg{
+    color: red;
+    font-weight: 1000;
+}

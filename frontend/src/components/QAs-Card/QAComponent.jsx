@@ -2,15 +2,17 @@ import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 import TestComponent from '../TestComponent/TestComponent';
 import "./QAComponent.css"
+import { addQuestion } from '../../services/QuestionService';
 
 const QAComponent = () => {
     
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState([]);
     const [isSubmited, setIsSubmited] = useState(false);
-    const [passed, setPassed] = useState(false);
+    const [passed, setPassed] = useState({questionPass: false, answerAndIsCorrectPass: false, answerFillPass: false});
     const [errors, setErrors] = useState([]);
     const [res, setRes] = useState();
+    const [errMessage, setErrMessage] = useState("");
 
 
     function handleQuestionChange(e){
@@ -65,26 +67,74 @@ const QAComponent = () => {
         })
         setAnswers(ansIsCorrectArray);
     }
-
+    /*
     function testErrors(){
         const isCorrectList = answers.map((ans) => ans.isCorrect);
-
+        console.log(question!== "");
         if(question!== ""){
+            setPassed({...passed, questionPass: true});
+            console.log(passed);
             if(answers.length < 3) {
+                setPassed({...passed, answerAndIsCorrectPass: false});
                 return(
                     <h3>You need at least 3 anwers!</h3>
                 );
             } else if(!isCorrectList.includes(true)){
+                setPassed({...passed, answerAndIsCorrectPass: false});
                 return (
                     <h3>You need at least one correct answer!</h3>
                 );
             } else{
                 setIsSubmited(false);
             }
-        } else 
+            setPassed({...passed, answerAndIsCorrectPass: true});
+        } else {
+            setPassed({...passed, questionPass: false});
             return <h3>Add question first!</h3>;
+        }
+          
     }
-    
+    */
+    function validation(){
+
+        const isCorrectList = answers.map((ans) => ans.isCorrect);
+        const texts = answers.map((el) => el.text);
+
+        const errorList = texts.map((txt, i) => {
+            if(txt.trim() === ''){
+                return i;
+            }
+            return null;
+
+        });
+        setErrors(errorList);
+
+        const isNull = (x) => x === null;
+        
+        if(question!== ""){
+            
+            if(answers.length < 3) {
+                setErrMessage("You need at least 3 anwers!");
+                return false;
+            } else if(!isCorrectList.includes(true)){
+                setErrMessage("You need at least one correct answer!");
+                return false;
+            } else if(!errorList.every(isNull)){
+                return false;
+            } else{
+                setIsSubmited(false);
+             }
+
+           
+        } else {
+            setErrMessage("Add question first!");
+            return false;
+        }
+        return true;
+
+    }
+
+/*
     function validate(){
         const texts = answers.map((el) => el.text);
 
@@ -93,17 +143,40 @@ const QAComponent = () => {
                 return i;
             }
             return null;
+
         });
         setErrors(errorList);
+        // console.log(errorList);
+        // console.log(errorList.includes(!null));
+        // console.log(errorList.some())
+
+        const isNull = (x) => x === null;
+        // console.log(errorList.every(isNull));
+        if(errorList.every(isNull)){
+            setPassed({...passed, answerFillPass: true});
+        } else {
+            setPassed({...passed, answerFillPass: false});
+        }
     }
+        */
         
     function handleSubmit(){
         setIsSubmited(true);
         // testErrors();
-        setRes(testErrors());
-        console.log(res);
-        validate();
-        console.log(answers);
+        // setRes(testErrors());
+        // console.log(res);
+        // validate();
+        // console.log(passed);
+        // console.log(answers);
+
+        let QAPayload = {question, answers};
+        console.log(QAPayload);
+        if(validation()){
+            // console.log("Prosao!");
+            addQuestion(QAPayload).then( (res) => {
+                console.log(res.data);
+            }).catch((err) => console.error(err));
+        }
     }
 
 
@@ -122,7 +195,7 @@ const QAComponent = () => {
                         />
                         
                         <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
-                        <span>{index === errors[index] && "Please fill answer"}</span>
+                        <span className='errMsg'>{index === errors[index] && "Please fill answer!"}</span>
                     </div>
                     <div className='row'>
                         <h6>Is the question correct?</h6>
@@ -160,7 +233,7 @@ const QAComponent = () => {
                 </div>
                 <div className="card-footer">
                 <button className='btn btn-success' onClick={handleSubmit}>Submit</button>
-                 {   isSubmited && res    }
+                 {   isSubmited && <h3>{errMessage}</h3>    }
                 </div>
             </div>
         </div>
