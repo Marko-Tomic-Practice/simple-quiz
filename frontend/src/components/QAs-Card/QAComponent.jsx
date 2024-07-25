@@ -2,16 +2,17 @@ import React, { useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 import "./QAComponent.css"
 import { addQuestion } from '../../services/QuestionService';
+import { useNavigate } from 'react-router-dom';
 
 const QAComponent = () => {
     
     const [qtext, setQtext] = useState("");
     const [answers, setAnswers] = useState([]);
     const [isSubmited, setIsSubmited] = useState(false);
-    const [passed, setPassed] = useState({questionPass: false, answerAndIsCorrectPass: false, answerFillPass: false});
     const [errors, setErrors] = useState([]);
-    const [res, setRes] = useState();
     const [errMessage, setErrMessage] = useState("");
+
+    const navigate = useNavigate();
 
 
     function handleQuestionChange(e){
@@ -117,7 +118,8 @@ const QAComponent = () => {
         if(validation()){
             // console.log("Prosao!");
             addQuestion(QAPayload).then( (res) => {
-                console.log(res.data);
+                // console.log(res.data);
+                navigate('/home');
             }).catch((err) => console.error(err));
         }
     }
@@ -170,7 +172,7 @@ const QAComponent = () => {
                 </div>
                 <div className="card-body">
                     <div className='row'>  
-                        {    dynamicInputs()    }                        
+                    {    dynamicInputs()    }                   
                     </div> <br/>
                     <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>
                 </div>

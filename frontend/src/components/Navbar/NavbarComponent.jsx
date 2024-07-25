@@ -24,7 +24,6 @@ const NavbarComponent = () => {
             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a className="dropdown-item" href="/add-questions">Add questions</a></li>
               <li><a className="dropdown-item" href="/edit-questions">Edit questions</a></li>
-              <li><a className="dropdown-item" href="/delete-questions">Delete questions</a></li>
             </ul>
           </li>
 

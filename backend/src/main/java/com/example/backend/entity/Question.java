@@ -21,6 +21,7 @@ public class Question {
 
     private String qtext;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "question_id")
     private List<Answer> answers;
 }
