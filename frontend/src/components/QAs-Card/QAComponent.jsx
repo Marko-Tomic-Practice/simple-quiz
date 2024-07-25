@@ -21,7 +21,7 @@ const QAComponent = () => {
 
 
     function handleAddInput(){
-        setAnswers([...answers, { atext: '', correctAnswer: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active"}]);
+        setAnswers([...answers, { atext: '', correctAnswer: false}]);
         setErrors([...errors, null]);
         setIsSubmited(false);
     }
@@ -48,7 +48,7 @@ const QAComponent = () => {
 
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
-                return { ...answer, correctAnswer: true, classNamePositive: "btn btn-outline-primary positive active", classNameNegative: "btn btn-outline-primary negative" };
+                return { ...answer, correctAnswer: true};
             }
             return answer;
         })
@@ -61,11 +61,27 @@ const QAComponent = () => {
         const ansIsCorrectArray = answers.map((answer, i) => {
             if(i === index){
                 
-                return { ...answer, correctAnswer: false, classNamePositive: "btn btn-outline-primary positive", classNameNegative: "btn btn-outline-primary negative active" };
+                return { ...answer, correctAnswer: false};
             }
             return answer;
         })
         setAnswers(ansIsCorrectArray);
+    }
+
+    function handleChangeTrueClass(index){
+        if(answers[index].correctAnswer){
+            return "btn btn-outline-primary positive active";
+        } else {
+            return "btn btn-outline-primary positive";
+        }
+    }
+
+    function handleChangeFalseClass(index){
+        if(answers[index].correctAnswer){
+            return "btn btn-outline-primary negative";
+        } else {
+            return "btn btn-outline-primary negative active";
+        }
     }
     
     function validation(){
@@ -106,14 +122,12 @@ const QAComponent = () => {
         return true;
 
     }
-
-
         
     function handleSubmit(){
         setIsSubmited(true);
 
         const QAPayload = {qtext, answers};
-        console.log(QAPayload);
+        // console.log(QAPayload);
         
         if(validation()){
             // console.log("Prosao!");
@@ -123,7 +137,6 @@ const QAComponent = () => {
             }).catch((err) => console.error(err));
         }
     }
-
 
     function dynamicInputs(){
         return(
@@ -145,8 +158,14 @@ const QAComponent = () => {
                     <div className='row'>
                         <h6>Is the question correct?</h6>
                         <div className="btn-group col-sm-1" role="group" aria-label="Basic outlined button group"> 
-                            <button type="button" className={ans.classNamePositive} onClick={()=>handleIsActiveTrue(index)}>✔️</button>
-                            <button type="button" className={ans.classNameNegative} onClick={()=>handleIsActiveFalse(index)}>❌</button>
+                            <button 
+                                type="button" 
+                                className={handleChangeTrueClass(index)} 
+                                onClick={()=>handleIsActiveTrue(index)}>✔️</button>
+                            <button 
+                                type="button" 
+                                className={handleChangeFalseClass(index)} 
+                                onClick={()=>handleIsActiveFalse(index)}>❌</button>
                         </div>
                     </div>
                 </div>
