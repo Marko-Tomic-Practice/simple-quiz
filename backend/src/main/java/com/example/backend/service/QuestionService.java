@@ -10,4 +10,8 @@ public interface QuestionService {
     List<Question> getAllQuestions();
 
     Question getQuestionById(Long quesitonId);
+
+    Question editQuestion(Long questionId, Question question);
+
+    void deleteQuestion(Long questionId);
 }

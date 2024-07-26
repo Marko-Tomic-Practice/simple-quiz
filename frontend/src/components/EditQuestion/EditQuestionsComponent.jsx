@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
-import { getAllQuestionsDB, getQuestionByIdDB } from '../../services/QuestionService';
+import { getAllQuestionsDB, getQuestionByIdDB, removeQuestionDB } from '../../services/QuestionService';
 import "./EditQuestionComponent.css"
 import { useNavigate } from 'react-router-dom';
 
@@ -33,6 +33,12 @@ const EditQuestionsComponent = () => {
         // }).catch((err) => console.error(err));
     }
 
+    function handleDelete(id){
+        removeQuestionDB(id).then(() => {
+            getAllQuestions();
+        }).catch((err) => console.error(err));
+    }
+
   return (
     <div>
         <NavbarComponent/>
@@ -50,7 +56,7 @@ const EditQuestionsComponent = () => {
                                     <div className='row gap-2'>  
                                         <h4 className='col'>{index+1}.{' ' + question.qtext}</h4>
                                         <button className='btn btn-secondary col-2' onClick={() => handleEdit(question.id)}>Edit</button>
-                                        <button className='btn btn-danger col-2'>Delete</button>
+                                        <button className='btn btn-danger col-2' onClick={() => handleDelete(question.id)}>Delete</button>
                                     </div> <br/>
                                 </div>
                             )

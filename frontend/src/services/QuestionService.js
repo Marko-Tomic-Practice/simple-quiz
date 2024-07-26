@@ -12,3 +12,11 @@ export const getAllQuestionsDB = () => {
 export const getQuestionByIdDB = (id) => {
     return axios.get(REST_API_BASE_URL+'/edit-questions/'+ id);
 }
+
+export const editQuestionDB = (id, QAPayload) => {
+    return axios.put(REST_API_BASE_URL+'/edit-questions/'+ id, QAPayload);
+}
+
+export const removeQuestionDB = (id) => {
+    return axios.delete(REST_API_BASE_URL+'/edit-questions/'+ id);
+}

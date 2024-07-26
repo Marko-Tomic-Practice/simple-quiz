@@ -27,11 +27,33 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getQuestionById(Long quesitonId) {
+    public Question getQuestionById(Long questionId) {
 
-        Question question = questionRepository.findById(quesitonId)
-                .orElseThrow(() -> new ResourceNotFoundException("Question with "+ quesitonId + " doesn't exist"));
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question with "+ questionId + " doesn't exist"));
 
         return question;
+    }
+
+//    TODO FINISH editQuestion method!
+    @Override
+    public Question editQuestion(Long questionId, Question question) {
+
+        Question questionDB = questionRepository.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question with "+ questionId + " doesn't exist"));
+
+        questionDB.setQtext(question.getQtext());
+        questionDB.setAnswers(question.getAnswers());
+
+        Question updatedQuestion = questionRepository.save(questionDB);
+
+        return updatedQuestion;
+    }
+
+    @Override
+    public void deleteQuestion(Long questionId) {
+
+        questionRepository.deleteById(questionId);
+
     }
 }

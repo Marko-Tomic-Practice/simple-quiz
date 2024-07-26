@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getQuestionByIdDB } from '../../services/QuestionService';
 
 const EditQuestionComponent = () => {
 
     const [QAresponse, setQAresponse] = useState({});
     const [qtext, setQtext] = useState("");
-    const [newQtext, setNewQtext] = useState("");
     const [answers, setAnswers] = useState([]);
     const [isSubmited, setIsSubmited] = useState(false);
     const [errors, setErrors] = useState([]);
+    const [errMessage, setErrMessage] = useState("");
 
 
     const { id } = useParams();
+    const navigate = useNavigate();
     
-     useEffect(() => {
+
+
+    //  TODO - PROBATI ASIHRONO UCITAVANJE!
+    useEffect(() => {
         getQuestionById(id);
     }, [id]);
 
@@ -28,8 +32,8 @@ const EditQuestionComponent = () => {
         }).catch((err) => console.error(err));
     }
 
-    function handleNewQuestion(e){
-        setNewQtext(e.target.value);
+    function handleQuestionChange(e){
+        setQtext(e.target.value);
     }
 
     function handleChangeTrueClass(index){
@@ -83,6 +87,45 @@ const EditQuestionComponent = () => {
         setAnswers(ansIsCorrectArray);
     }
 
+    function validation(){
+
+        const isCorrectList = answers.map((ans) => ans.correctAnswer);
+        const atexts = answers.map((el) => el.atext);
+
+        const errorList = atexts.map((txt, i) => {
+            if(txt.trim() === ''){
+                return i;
+            }
+            return null;
+
+        });
+        setErrors(errorList);
+
+        const isNull = (x) => x === null;
+        
+        if(qtext!== ""){
+            
+            if(answers.length < 3) {
+                setErrMessage("You need at least 3 anwers!");
+                return false;
+            } else if(!isCorrectList.includes(true)){
+                setErrMessage("You need at least one correct answer!");
+                return false;
+            } else if(!errorList.every(isNull)){
+                return false;
+            } else{
+                setIsSubmited(false);
+             }
+
+           
+        } else {
+            setErrMessage("Add question first!");
+            return false;
+        }
+        return true;
+
+    }
+
     function dynamicInputs(){
         return(
             
@@ -98,7 +141,7 @@ const EditQuestionComponent = () => {
                         />
                         
                         <button className='btn btn-danger col-sm-1' onClick={()=>handleRemoveClick(index)}>X</button>
-                        {/* <span className='errMsg'>{index === errors[index] && "Please fill answer!"}</span> */}
+                        <span className='errMsg'>{index === errors[index] && "Please fill answer!"}</span> 
                     </div>
                     <div className='row'>
                         <h6>Is the question correct?</h6>
@@ -114,8 +157,8 @@ const EditQuestionComponent = () => {
     
     function handleAddInput(){
         setAnswers([...answers, { atext: '', correctAnswer: false}]);
-        // setErrors([...errors, null]);
-        // setIsSubmited(false);
+        setErrors([...errors, null]);
+        setIsSubmited(false);
     }
 
     function handleRemoveClick(index){
@@ -123,10 +166,21 @@ const EditQuestionComponent = () => {
          
         newArray.splice(index, 1);
         setAnswers(newArray);
+        setIsSubmited(false);
     }
 
     function handleSaveChanges(){
-        console.log(answers);
+        setIsSubmited(true);
+        
+        const QAPayload = {qtext, answers};
+
+        if(validation()){
+            
+        }
+        
+        // console.log(validation());
+        // console.log(qtext);
+        // console.log(answers);
     }
 
   return (
@@ -142,7 +196,7 @@ const EditQuestionComponent = () => {
                     type="text"
                     name='question'
                     defaultValue={qtext}
-                    onChange={(e) => handleNewQuestion(e)}
+                    onChange={(e) => handleQuestionChange(e)}
                 /> ?
                 </div>
             
@@ -154,7 +208,13 @@ const EditQuestionComponent = () => {
                 </div>
 
                 <div className="card-footer">
-                    <button className='btn btn-success' onClick={handleSaveChanges}>Save Changes</button>
+                    <div className='row gap-2'>
+                        <button className='btn btn-success col-2' onClick={handleSaveChanges}>Save Changes</button>
+                        <button className='btn btn-secondary col-2' onClick={() => navigate(-1)}>Back</button>
+                    </div>
+                    <div className='row'>
+                    {   isSubmited && <h3>{errMessage}</h3>    }
+                    </div>
                 </div>
 
             </div>

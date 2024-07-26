@@ -40,7 +40,17 @@ public class QuestionController {
         return new ResponseEntity<>(question, HttpStatus.OK);
     }
 
-    //TODO  Edit Question
+    @PutMapping("/edit-questions/{id}")
+    public ResponseEntity<Question> editQuestion(@PathVariable("id") Long questionId,
+                                                 @RequestBody Question question){
+        Question updatedQuestion = questionService.editQuestion(questionId, question);
 
-    //TODO  Delete Question
+        return new ResponseEntity<>(updatedQuestion, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/edit-questions/{id}")
+    public void  deleteQuestion(@PathVariable("id") Long questionId){
+        questionService.deleteQuestion(questionId);
+    }
+
 }
