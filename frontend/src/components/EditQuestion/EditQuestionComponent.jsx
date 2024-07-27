@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import NavbarComponent from '../Navbar/NavbarComponent'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getQuestionByIdDB } from '../../services/QuestionService';
+import { editQuestionDB, getQuestionByIdDB } from '../../services/QuestionService';
 
 const EditQuestionComponent = () => {
 
@@ -175,7 +175,9 @@ const EditQuestionComponent = () => {
         const QAPayload = {qtext, answers};
 
         if(validation()){
-            
+            editQuestionDB(id, QAPayload).then(() => {
+                navigate(-1);
+            }).catch((err) => console.error(err));
         }
         
         // console.log(validation());

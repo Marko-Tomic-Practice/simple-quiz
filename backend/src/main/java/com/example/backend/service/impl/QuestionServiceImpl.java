@@ -35,7 +35,7 @@ public class QuestionServiceImpl implements QuestionService {
         return question;
     }
 
-//    TODO FINISH editQuestion method!
+
     @Override
     public Question editQuestion(Long questionId, Question question) {
 
