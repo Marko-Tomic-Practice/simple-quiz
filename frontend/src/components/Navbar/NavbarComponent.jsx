@@ -1,6 +1,14 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const NavbarComponent = () => {
+  
+  const navigate = useNavigate();
+
+  function handleSignIn(){
+    navigate('/sign-in');
+  }
+
   return (
     <nav className="navbar navbar-expand-xl navbar-light bg-light">
     <div className="container-fluid">
@@ -26,9 +34,9 @@ const NavbarComponent = () => {
               <li><a className="dropdown-item" href="/edit-questions">Edit questions</a></li>
             </ul>
           </li>
-
         </ul>
       </div>
+      <button className="btn btn-warning me-4" onClick={handleSignIn}>Sign-In</button>
     </div>
   </nav>
   )

@@ -5,6 +5,7 @@ import HomePageComponent from './components/HomePage/HomePageComponent'
 import QAComponent from './components/QAs-Card/QAComponent'
 import EditQuestionsComponent from './components/EditQuestion/EditQuestionsComponent'
 import EditQuestionComponent from './components/EditQuestion/EditQuestionComponent'
+import SignInComponent from './components/Sign-In/SignInComponent'
 
 
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='/add-questions' element={<QAComponent/>}></Route>
         <Route path='/edit-questions' element={<EditQuestionsComponent/>}></Route>
         <Route path='/edit-questions/:id' element={<EditQuestionComponent/>}></Route>
+        <Route path='/sign-in' element={<SignInComponent/>}></Route>
       </Routes>
     </BrowserRouter>
   )

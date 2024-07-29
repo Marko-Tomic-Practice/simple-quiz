@@ -192,31 +192,31 @@ const EditQuestionComponent = () => {
         <div className='row'>
             <div className='col-md-3'></div>
             <div className="col-md-6 card">
-            <div className="card-header h2">
-                Question: <input
-                    className='col-md-7' 
-                    type="text"
-                    name='question'
-                    defaultValue={qtext}
-                    onChange={(e) => handleQuestionChange(e)}
-                /> ?
+                <div className="card-header h2">
+                    Question: <input
+                        className='col-md-7' 
+                        type="text"
+                        name='question'
+                        defaultValue={qtext}
+                        onChange={(e) => handleQuestionChange(e)}
+                    /> ?
                 </div>
-            
+                
                 <div className="card-body">
-                    <div className='row'>  
-                        {    dynamicInputs()    }                   
-                    </div> <br/>
-                        <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>     
+                        <div className='row'>  
+                            {    dynamicInputs()    }                   
+                        </div> <br/>
+                            <button className='btn btn-primary' onClick={handleAddInput}>Add Answer</button>     
                 </div>
 
                 <div className="card-footer">
-                    <div className='row gap-2'>
-                        <button className='btn btn-success col-2' onClick={handleSaveChanges}>Save Changes</button>
-                        <button className='btn btn-secondary col-2' onClick={() => navigate(-1)}>Back</button>
-                    </div>
-                    <div className='row'>
-                    {   isSubmited && <h3>{errMessage}</h3>    }
-                    </div>
+                        <div className='row gap-2'>
+                            <button className='btn btn-success col-2' onClick={handleSaveChanges}>Save Changes</button>
+                            <button className='btn btn-secondary col-2' onClick={() => navigate(-1)}>Back</button>
+                        </div>
+                        <div className='row'>
+                        {   isSubmited && <h3>{errMessage}</h3>    }
+                        </div>
                 </div>
 
             </div>
