@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const NavbarComponent = () => {
   
   const navigate = useNavigate();
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   function handleSignIn(){
     navigate('/sign-in');
@@ -24,16 +25,18 @@ const NavbarComponent = () => {
           <li className="nav-item">
             <a className="nav-link active" aria-current="page" href="/home">Home</a>
           </li>
-    
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Administration
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a className="dropdown-item" href="/add-questions">Add questions</a></li>
-              <li><a className="dropdown-item" href="/edit-questions">Edit questions</a></li>
-            </ul>
-          </li>
+          {
+            isSignedIn &&
+            <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Administration
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a className="dropdown-item" href="/add-questions">Add questions</a></li>
+                  <li><a className="dropdown-item" href="/edit-questions">Edit questions</a></li>
+                </ul>
+            </li>
+          }
         </ul>
       </div>
       <button className="btn btn-warning me-4" onClick={handleSignIn}>Sign-In</button>
