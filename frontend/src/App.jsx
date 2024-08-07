@@ -19,7 +19,8 @@ function App() {
         <Route path='/add-questions' element={<QAComponent/>}></Route>
         <Route path='/edit-questions' element={<EditQuestionsComponent/>}></Route>
         <Route path='/edit-questions/:id' element={<EditQuestionComponent/>}></Route>
-        <Route path='/sign-in' element={<SignInComponent/>}></Route>
+        <Route path='/sign-in' element={<SignInComponent title ="Sign In"/>}></Route>
+        <Route path='/register' element={<SignInComponent title ="Register"/>}></Route>
       </Routes>
     </BrowserRouter>
   )

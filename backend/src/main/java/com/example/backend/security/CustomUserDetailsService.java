@@ -23,12 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {   //Implem
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 
-        //Izvlacimo korisnika iz baze podataka
+        //  Izvlacimo korisnika iz baze podataka
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist by Username or Email"));
 
 
-        //Ovde smo pretvorili Role u GrantedAuthority
+        //  Ovde smo pretvorili Role u GrantedAuthority
         Set<GrantedAuthority> authorities = user.getRoles().stream()
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
