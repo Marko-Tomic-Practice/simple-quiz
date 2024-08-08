@@ -50,6 +50,7 @@ public class SpringSecurityConfiguration {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers("/register").permitAll();
+                    authorize.requestMatchers("/sign-in").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN");

@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { registerDB, signinDB } from '../../services/AuthService';
 
 const SignInCardComponent = (props) => {
 
     const navigate = useNavigate();
     
+    const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
+    const [usernameOrEmail, setUsernameOrEmail] = useState("");
     const [repPassword, setRepPassword] = useState("");
+
     const [register, setRegister] = useState(false);
 
+    const location = useLocation();
+    const [title, setTitle] = useState("");
 
     useEffect(()=> {
-        if(props.title === "Register"){
+        if(location.pathname === "/register"){
             setRegister(true);
+            setTitle("Register");
+        } else {
+            setTitle("Sign In");
         }
-    }, [props])
+    }, [location])
     
     function handleClickBack(){
         navigate(-1);
@@ -38,10 +46,26 @@ const SignInCardComponent = (props) => {
     }
 
     function handleClickSignIn(){
+
+        const registerReq = { name, username, email, password };
+        const signinReq = { usernameOrEmail, password };
+
         if(validate()){
-            console.log("Prosao");
+            if(register){
+                registerDB(registerReq).then((res) => {
+                    console.log(res.data);
+                    navigate('/sign-in');
+                    window.location.reload();                   
+                    //  TODO: KRUCIJALNA GRESKA SA PREMESTANJEM PUTEM TITLE UMESTO URI!!!
+                    // navigate('/home');
+                }).catch((err) => console.error(err));
+            } else
+                signinDB(signinReq).then((res) => {
+                    console.log(res.data);
+                    navigate('/home');
+                }).catch((err) => console.error(err));
         } else
-            console.log("Greska");
+            window.alert("Mrzi me da radim vizuelnu validaciju, unesi email sa @ i neka ti se slazu sifre");
     }
 
 
@@ -49,12 +73,16 @@ const SignInCardComponent = (props) => {
     <div className='row justify-content-center mt-5'>
         <div className='col-5 card'>
             <div className='card-header h2 text-center'>
-                {props.title}
+                {title}
             </div>
             <div className='card-body h4'>
                 <div className='row gap-3'>
                     { register ?
                         <>
+                            <div className='row'>
+                                <h4 className='col-5 text-center'>Name</h4>
+                                <input className='col-7' type="text" onChange={(e)=>setName(e.target.value)}/>
+                            </div>
                             <div className='row'>
                                 <h4 className='col-5 text-center'>Username</h4>
                                 <input className='col-7' type="text" onChange={(e)=>setUsername(e.target.value)}/>
@@ -76,7 +104,7 @@ const SignInCardComponent = (props) => {
                         <>
                             <div className='row'>
                                 <h4 className='col-5 text-center'>Username or E-mail:</h4>
-                                <input className='col-7' type="text" onChange={(e)=>setUser(e.target.value)}/>
+                                <input className='col-7' type="text" onChange={(e)=>setUsernameOrEmail(e.target.value)}/>
                             </div>
                             <div className='row'>
                                 <h4 className='col-5 text-center'>Password:</h4>
@@ -95,7 +123,7 @@ const SignInCardComponent = (props) => {
                     </div>
                     <div className='col-3'>
                         <div className='row text-center'>
-                            <button className='btn btn-success' onClick={handleClickSignIn}>{props.title}</button>
+                            <button className='btn btn-success' onClick={handleClickSignIn}>{title}</button>
                             {!register && <h6>Or <a href="/register">register</a></h6>}
                         </div>
                     </div>

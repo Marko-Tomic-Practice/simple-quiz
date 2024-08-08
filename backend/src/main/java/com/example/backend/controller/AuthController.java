@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterDto;
+import com.example.backend.dto.SignInDto;
 import com.example.backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,4 +22,15 @@ public class AuthController {
 
         return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    //  Build Sign In REST API
+    @PostMapping("/sign-in")
+    public ResponseEntity<String> signin(@RequestBody SignInDto signInDto){
+        String response = authService.signin(signInDto);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+
+    }
+
 }

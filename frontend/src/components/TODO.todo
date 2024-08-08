@@ -6,3 +6,4 @@
 ☐ Add Score
 ☐ Add coloring for buttons on true and false
 ☐ Prepare POST, GET, PUT, DELETE endpoints
+☐ navigate('/sign-in')                     TODO: KRUCIJALNA GRESKA SA PREMESTANJEM PUTEM TITLE UMESTO URI!!!
