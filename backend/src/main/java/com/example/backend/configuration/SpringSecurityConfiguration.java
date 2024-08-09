@@ -1,5 +1,8 @@
 package com.example.backend.configuration;
 
+import com.example.backend.security.JwtAuthenticationEntryPoint;
+import com.example.backend.security.JwtAuthenticationFilter;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @AllArgsConstructor
@@ -23,6 +27,10 @@ public class SpringSecurityConfiguration {
     //  U Spring Security 6 ne moramo da explicitno navodimo UserDetailsService jer ce ga
     //  AuthenticationManager sam povuci
     private UserDetailsService userDetailsService; //Ubacujemo interfejs da injektiramo dependency
+
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
@@ -58,6 +66,13 @@ public class SpringSecurityConfiguration {
                     authorize.requestMatchers(HttpMethod.GET, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
+        //  Dodatak za JWT
+        //  Ako ne autentifikovani korisnik zeli da pristupi, baci ovaj exception
+        http.exceptionHandling((exception)->{
+            exception.authenticationEntryPoint(jwtAuthenticationEntryPoint);
+        });
+        //  Execute before executing Spring Security Filters
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

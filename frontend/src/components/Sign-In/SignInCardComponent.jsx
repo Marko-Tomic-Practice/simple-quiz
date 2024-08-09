@@ -49,15 +49,15 @@ const SignInCardComponent = (props) => {
 
         const registerReq = { name, username, email, password };
         const signinReq = { usernameOrEmail, password };
-
+        //  TODO: Prilagoditi za JWT
+        //  const token = "Bearer " + response.data.accessToken
+        //  storeToken(token); 
         if(validate()){
             if(register){
                 registerDB(registerReq).then((res) => {
                     console.log(res.data);
                     navigate('/sign-in');
                     window.location.reload();                   
-                    //  TODO: KRUCIJALNA GRESKA SA PREMESTANJEM PUTEM TITLE UMESTO URI!!!
-                    // navigate('/home');
                 }).catch((err) => console.error(err));
             } else
                 signinDB(signinReq).then((res) => {

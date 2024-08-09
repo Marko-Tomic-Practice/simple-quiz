@@ -7,6 +7,7 @@ import com.example.backend.entity.User;
 import com.example.backend.exception.QuizAPIException;
 import com.example.backend.repository.RoleRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.security.JwtTokenProvider;
 import com.example.backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,9 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-
     private AuthenticationManager authenticationManager;
+
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -78,8 +80,9 @@ public class AuthServiceImpl implements AuthService {
         ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-        return "User Signed In Successfully!";
+        //  Pravimo token od datih korisnikovih kredencijala
+        String token = jwtTokenProvider.generateToken(authentication);
+        //  Prosledjujemo dobijeni token
+        return token;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.JwtAuthResponse;
 import com.example.backend.dto.RegisterDto;
 import com.example.backend.dto.SignInDto;
 import com.example.backend.service.AuthService;
@@ -25,10 +26,16 @@ public class AuthController {
 
     //  Build Sign In REST API
     @PostMapping("/sign-in")
-    public ResponseEntity<String> signin(@RequestBody SignInDto signInDto){
-        String response = authService.signin(signInDto);
+    //  U ResponseEntity<JwtAuthResponse> prosledjujemo JwtAuthResponse to je DTO klasa
+    public ResponseEntity<JwtAuthResponse> signin(@RequestBody SignInDto signInDto){
+        //  nama je response postao token
+        //  String response = authService.signin(signInDto);
+        String token = authService.signin(signInDto);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+
+        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
 
 
     }
